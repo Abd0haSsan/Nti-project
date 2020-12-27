@@ -42,6 +42,7 @@ const UserSchema = new mongoose.Schema({
         minLength:6,
         maxLength:100,
         trim:true ,
+        required:true
         // validate(value){
         //     //check password strong
         // }
@@ -58,10 +59,24 @@ const UserSchema = new mongoose.Schema({
         type: Boolean, 
         default: true
     },
-    birthday:{
-        type: Date,
-        required:true
-    },
+    birthday:[
+        {
+            day:{
+                type:Number,
+                min:1,
+                max:31
+            },
+            month:{
+                type:Number,
+                min:1,
+                max:12
+            },
+            year:{
+                type:Number,
+                
+            }
+        }
+    ],
     user_role:{
         type:Number,
         default:0,
@@ -81,6 +96,7 @@ UserSchema.methods.toJSON=function(){
     delete userOBJ.user_password
     return userOBJ
 }
+
 UserSchema.pre('save',async function(next){
     const user = this
     if(user.isModified('user_password'))
